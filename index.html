@@ -1,1 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kiki — Homecoming</title>
 
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle at top, #1a1a2e, #050510);
+    color: white;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
+
+  .scene {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .box {
+    width: 70%;
+    max-width: 700px;
+    padding: 25px;
+    background: rgba(255,255,255,0.06);
+    border-left: 3px solid #ff4d6d;
+    backdrop-filter: blur(6px);
+    animation: fadeIn 1.5s ease;
+  }
+
+  #text {
+    font-size: 1.2rem;
+    min-height: 80px;
+    line-height: 1.6;
+  }
+
+  .controls {
+    margin-top: 15px;
+  }
+
+  button {
+    margin: 5px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: none;
+    background: #ff4d6d;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+    background: #ff1e4d;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .choiceBox {
+    margin-top: 15px;
+  }
+
+  .choiceBox button {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+  }
+
+  .glow {
+    text-shadow: 0 0 15px #ff4d6d;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
+  .fade {
+    animation: fadeIn 1s ease;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="scene">
+  <div class="box">
+    <div id="text" class="glow"></div>
+
+    <div class="choiceBox hidden" id="choices">
+      <button onclick="choose(0)">Read the letter left behind</button>
+      <button onclick="choose(1)">Walk deeper into memory</button>
+      <button onclick="choose(2)">Pretend nothing happened</button>
+    </div>
+
+    <div class="controls">
+      <button onclick="next()">Next</button>
+      <button onclick="revealSecret()">Unlock Secret Memory</button>
+    </div>
+
+    <div id="secret" class="hidden" style="margin-top:15px; color:#ffb3c1;">
+      “Even when I disappeared from your world… I was still waiting in yours.”
+    </div>
+
+    <div id="ending" class="hidden" style="margin-top:15px; color:#a3ffbf;">
+      ENDING UNLOCKED: “The one who always came back was you, not her.”
+    </div>
+  </div>
+</div>
+
+<script>
+const scenes = [
+  "The rain stopped the moment you returned, Kiki.",
+  "Some memories don’t fade… they wait.",
+  "I left pieces of myself in places only you would find.",
+  "Do you remember why you left? Or only why you came back?",
+  "A letter was never sent… but it still exists in this world."
+];
+
+let i = 0;
+let secretUnlocked = false;
+
+function typeText(text) {
+  let el = document.getElementById("text");
+  el.innerHTML = "";
+  let index = 0;
+
+  let interval = setInterval(() => {
+    el.innerHTML += text[index];
+    index++;
+    if (index >= text.length) clearInterval(interval);
+  }, 30);
+}
+
+function next() {
+  if (i < scenes.length) {
+    typeText(scenes[i]);
+    i++;
+  } else {
+    document.getElementById("choices").classList.remove("hidden");
+  }
+}
+
+function choose(option) {
+  const endings = [
+    "You opened the letter… but it only contained your name written over and over.",
+    "You walked deeper… until the world forgot your footsteps.",
+    "You chose silence… and the silence chose you back."
+  ];
+
+  document.getElementById("choices").classList.add("hidden");
+  typeText(endings[option]);
+
+  setTimeout(() => {
+    document.getElementById("ending").classList.remove("hidden");
+  }, 3000);
+}
+
+function revealSecret() {
+  if (!secretUnlocked) {
+    document.getElementById("secret").classList.remove("hidden");
+    secretUnlocked = true;
+  }
+}
+</script>
+
+</body>
+</html>
